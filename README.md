@@ -1,4 +1,5 @@
-#Функции для обработки финансовых данных и дат ##Этот проект содержит несколько полезные функций для работы с финансовыми данными и датами:
+#Функции для обработки финансовых данных и дат
+##Этот проект содержит несколько полезных функций для работы с финансовыми данными и датами:
 
 mask_account_card() - для маскирования номеров карт и счетов
 
@@ -11,6 +12,12 @@ get_mask_account() - для маскирования номеров счетов
 filter_by_state() - для фильтрации банковских операций в зависимости от состояния
 
 sort_by_date() - для сортировки по дате по возрастанию или убыванию
+
+filter_by_currency() - для фильтрации транзакций по заданной валюте
+
+transaction_descriptions() - функция-генератор, которая возвращает описания транзакций
+
+card_number_generator() - функция-генератор, которая генерирует номера карт в заданом диапазоне цифр
 
 Функция mask_account_card Маскирует номер карты или счета, оставляя только часть цифр видимыми.
 
@@ -102,9 +109,51 @@ python bank_oper = [ {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T1
 
 sorted_operations = sort_by_date(bank_oper, reverse=False) print(sorted_operations)
 
+Функция filter_by_currency() фильтрует по заданной валюте, принимая на вход параметры transactions, currency
+Параметры:
+transactions -список словарей с транзакциями
+currency - код валюты для фильтрации (например "USD")
+Возвращает:
+
+Итератор, который выдает транзакции с указанной валютой
+Пример использования:
+
+usd_transactions = filter_by_currency(transactions, "USD")
+for transaction in usd_transactions:
+    print(transaction)
+
+Функция transaction_descriptions() принимает на вход transactions
+Параметры: transactions - список словарей с транзакциями
+
+Возвращает:
+
+Итератор с описаниями транзакций
+Пример использования: 
+descriptions = transaction_descriptions(transactions)
+for desc in descriptions:
+    print(desc)
+
+Функция card_number_generator() - генератор, которая генерирует номера карт в заданном диапазоне цифр
+и в формате маски XXXX XXXX XXXX XXXX
+
+Параметры:
+
+start - начальная цифра диапазона (0-9)
+
+end - конечная цифра диапазона (0-9)
+
+Возвращает:
+
+Итератор, который выдает номера карт в формате "XXXX XXXX XXXX XXXX"
+Пример:
+generator = card_number_generator(1, 5)
+print(next(generator))  # "1234 5678 9012 3456"
+
 Импортируйте нужные функции:
 
-python from masks import mask_account_card, get_date, get_mask_card_number, get_mask_account
+from src.masks import mask_account_card, get_date, get_mask_card_number, get_mask_account
+from src.generators filter_by_currency, transaciton_descriptions, card_number_generator
+from src.processing filter_by_state, sort_by_date
 
 Тестирование Проект включает набор тестов с использованием pytest. Тесты проверяют:
 
