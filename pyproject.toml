@@ -33,8 +33,3 @@ line_length = 119
 # Максимальная длина строки
 line-length = 119
 
-[tool.pytest.ini_options]
-addopts = "--cov=tests/test_generators.py --cov-report=html"
-
-[tool.coverage.report]
-format = xhtml
