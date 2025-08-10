@@ -48,47 +48,53 @@ transactions = [
 
 
 def filter_by_currency(transactions, currency):
+    """Функция принимает на вход список словарей, представляющих транзакциии. Она возвращает итератор, который
+    поочередно выдает транзакции, где валюта соответствует заданной"""
+    if not isinstance(transactions, list):
+        raise TypeError("transactions must be a list")
+
     for transaction in transactions:
-        if transaction["operationAmount"]["currency"]["code"] == currency:
-            yield transaction
+        try:
+            if not isinstance(transaction, dict):
+                continue
 
+            op_amount = transaction.get("operationAmount")
+            if not isinstance(op_amount, dict):
+                continue
 
-if __name__ == "__main__":
-    usd_transactions = filter_by_currency(transactions, "USD")
-    for _ in range(3):
-        print(next(usd_transactions))
+            curr = op_amount.get("currency")
+            if not isinstance(curr, dict):  # Только словарь!
+                continue
+
+            if curr.get("code") == currency:
+                yield transaction
+
+        except (AttributeError, TypeError, KeyError):
+            continue
 
 
 def transaction_descriptions(transactions):
+    """Функция-генератор, которая принимает списко словарей с транзакциями и возвращает описание
+    каждой операции по очереди"""
+    if not isinstance(transactions, list):
+        raise TypeError("transactions must be a list")
     for trans in transactions:
+        if "description" not in trans:
+            raise KeyError("description key not found in transaction")
         yield trans["description"]
 
-
-if __name__ == "__main__":
-    descriptions = transaction_descriptions(transactions)
-    for _ in range(5):
-        print(next(descriptions))
-
-
 def card_number_generator(start, end):
+    """Функция-генератор, которая выдает номера в формате маски XXXX XXXX XXXX XXXX. Геренатор
+    принимает начальное и конечное значения для генерации диапазона номеров"""
+    if not isinstance(start, int) or not isinstance(end, int):
+        raise TypeError("start and end must be integers")
+    if start > end or start < 0 or end > 9:
+        raise ValueError("start and end must be between 0 and 9")
     import random
-
+    random.seed(42)  # Фиксированный seed для воспроизводимости
     while True:
-        # Генерируем 16 случайных цифр в заданном диапазоне
         digits = [str(random.randint(start, end)) for _ in range(16)]
-
-        # Форматируем в маску XXXX XXXX XXXX XXXX
-        masked_number = (
-            f"{''.join(digits[:4])} "
-            f"{''.join(digits[4:8])} "
-            f"{''.join(digits[8:12])} "
-            f"{''.join(digits[12:16])}"
-        )
-
-        yield masked_number
-
-
-if __name__ == "__main__":
-    generator = card_number_generator(0, 9)
-    for _ in range(5):  # Выведет 5 номеров
-        print(next(generator))
+        yield (f"{''.join(digits[:4])}"
+               f" {''.join(digits[4:8])} "
+               f"{''.join(digits[8:12])}"
+               f" {''.join(digits[12:16])}")

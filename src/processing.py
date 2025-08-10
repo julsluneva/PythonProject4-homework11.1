@@ -14,17 +14,11 @@ def filter_by_state(bank_oper: list[dict], state: str = "EXECUTED") -> list[dict
     # выводим в консоль нужный словарь
     return [bank_oper for bank_oper in bank_oper if bank_oper.get("state") == state]
 
-
-if __name__ == "__main__":
-    print(filter_by_state(bank_oper, state="CANCELED"))
-
-
-def sort_by_date(bank_oper: list[dict], reverse=True) -> list[dict]:
-    """ "Функция принимает список словарей и сортирует его по ключу date(по дате).
-    По умолчанию сортировка по убыванию"""
-
-    return sorted(bank_oper, key=lambda x: x["date"], reverse=reverse)
-
-
-if __name__ == "__main__":
-    print(sort_by_date(bank_oper))
+def sort_by_date(bank_oper: list[dict], reverse: bool = True) -> list[dict]:
+    """Функция принимает список словарей и сортирует его по ключу date(по дате).
+    По умолчанию сортировка по убыванию. Пропускает элементы без ключа date."""
+    return sorted(
+        (item for item in bank_oper if "date" in item),
+        key=lambda x: x["date"],
+        reverse=reverse,
+    )
