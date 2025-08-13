@@ -1,6 +1,8 @@
-import pytest
 import itertools
 from datetime import datetime
+
+import pytest
+
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
@@ -343,9 +345,11 @@ def test_card_number_generator_fixed_output():
 
     assert numbers1 == numbers2
 
-import pytest
 import itertools
 from datetime import datetime
+
+import pytest
+
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
