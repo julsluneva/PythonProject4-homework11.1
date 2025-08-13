@@ -34,9 +34,8 @@ def log(filename=None):
 
 @log()
 def my_function(x,y):
-    return x + y
+    return x / y
 
-my_function(1, 2)
 
-if __name__ ="__main__":
-    print(my_function(1, 2))
+if __name__ == "__main__":
+    print(my_function(1, 0))
